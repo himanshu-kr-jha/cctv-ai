@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+*.log
+backend/uploads
+backend/uploads
+!backend/uploads/models/.gitkeep
+!backend/uploads/snapshots/.gitkeep
+backend/streams/samples/*.mp4
