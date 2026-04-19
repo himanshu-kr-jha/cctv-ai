@@ -66,7 +66,7 @@ export default function Home() {
                   <Shield className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">SentinelAI</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">WatchTowerAI</h1>
                   <p className="text-xs text-primary-400/80 tracking-widest uppercase font-semibold">Intelligent Surveillance Platform</p>
                 </div>
               </div>

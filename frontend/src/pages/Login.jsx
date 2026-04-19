@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { Shield, Eye, EyeOff, Scan } from 'lucide-react';
+import { Eye, EyeOff, Scan } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 
@@ -49,12 +49,14 @@ export default function Login() {
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-            className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-primary-600/20 mb-5"
-          >
-            <Shield className="w-8 h-8 text-white" />
+            className="flex items-center justify-center mb-6"        
+            >
+              <img src="/logo.png" alt="WatchTowerAI Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_25px_rgba(139,92,246,0.7)]" />
+          
+           
           </motion.div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Welcome back</h1>
-          <p className="text-gray-500 text-sm mt-1">Sign in to <span className="text-primary-400 font-medium">SentinelAI</span></p>
+          <p className="text-gray-500 text-sm mt-1">Sign in to <span className="text-primary-400 font-medium">WatchTowerAI</span></p>
         </div>
 
         {/* Form card */}
