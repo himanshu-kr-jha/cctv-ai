@@ -1,5 +1,6 @@
 const AIModel = require('../models/AIModel');
 const { asyncHandler } = require('../utils/helpers');
+const { validateModelFile, clearModelCache } = require('../services/inferenceService');
 const path = require('path');
 const fs = require('fs');
 
@@ -20,6 +21,17 @@ exports.getModel = asyncHandler(async (req, res) => {
 exports.createModel = asyncHandler(async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'Model file is required' });
+  }
+
+  // Validate that the uploaded file is a real ONNX model
+  const validation = validateModelFile(req.file.path);
+  if (!validation.valid) {
+    // Clean up the rejected file from disk
+    try { fs.unlinkSync(req.file.path); } catch (_) {}
+    return res.status(400).json({
+      message: 'Invalid model file',
+      detail: validation.reason,
+    });
   }
 
   const { name, labels, alertLabels, confidenceThreshold, inputResolution, modelType, description } = req.body;
@@ -67,6 +79,11 @@ exports.toggleModel = asyncHandler(async (req, res) => {
   model.isActive = !model.isActive;
   await model.save();
 
+  // If reactivating, clear the inference blacklist so it gets a fresh retry
+  if (model.isActive && model.filePath) {
+    clearModelCache(model.filePath);
+  }
+
   const io = req.app.get('io');
   if (io) io.to('dashboard').emit('model-updated', { modelId: model._id, isActive: model.isActive });
 
@@ -77,6 +94,11 @@ exports.toggleModel = asyncHandler(async (req, res) => {
 exports.deleteModel = asyncHandler(async (req, res) => {
   const model = await AIModel.findById(req.params.id);
   if (!model) return res.status(404).json({ message: 'Model not found' });
+
+  // Clear inference caches
+  if (model.filePath) {
+    clearModelCache(model.filePath);
+  }
 
   // Delete file from disk
   if (model.filePath && fs.existsSync(model.filePath)) {

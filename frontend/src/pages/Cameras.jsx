@@ -4,7 +4,7 @@ import api from '../api/axios';
 import CameraCard from '../components/CameraCard';
 import { CardSkeleton } from '../components/LoadingSkeleton';
 import ConfirmDialog from '../components/ConfirmDialog';
-import { Plus, X, Camera as CameraIcon } from 'lucide-react';
+import { Plus, X, Camera as CameraIcon, Video, Wifi } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { SOURCE_TYPES } from '../utils/constants';
@@ -85,7 +85,7 @@ export default function Cameras() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Cameras</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Cameras</h1>
           <p className="text-gray-500 text-sm mt-1">Manage video feeds and detection</p>
         </div>
         <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center gap-2 text-sm">
@@ -104,8 +104,8 @@ export default function Cameras() {
             className="overflow-hidden"
           >
             <form onSubmit={handleCreate} className="glass-card space-y-4">
-              <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
-                <CameraIcon className="w-4 h-4 text-primary-400" /> Add New Camera
+              <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <CameraIcon className="w-4 h-4 text-accent" /> Add New Camera
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -173,11 +173,31 @@ export default function Cameras() {
           ))}
         </div>
       ) : (
-        <div className="glass-card text-center py-16">
-          <CameraIcon className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400 mb-2">No cameras configured</p>
-          <p className="text-gray-600 text-sm">Click "Add Camera" to get started</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card text-center py-16 px-8"
+        >
+          <div className="relative inline-block mb-6">
+            <div className="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto">
+              <Video className="w-10 h-10 text-accent" />
+            </div>
+            <div className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center">
+              <Wifi className="w-4 h-4 text-accent" />
+            </div>
+          </div>
+          <h3 className="text-lg font-bold text-gray-800 mb-2">No cameras configured</h3>
+          <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
+            Add your first camera to start monitoring video feeds. Supports webcam, RTSP streams, video files, and sample feeds.
+          </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="btn-primary inline-flex items-center gap-2 text-sm"
+          >
+            <Plus className="w-4 h-4" />
+            Add Your First Camera
+          </button>
+        </motion.div>
       )}
 
       {/* Delete confirmation */}

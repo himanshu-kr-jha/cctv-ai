@@ -35,44 +35,44 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-surface-900 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-white relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-600/20 rounded-full blur-[100px]" />
-        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-primary-600/20 rounded-full blur-[100px]" />
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-[100px]" />
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-accent/10 rounded-full blur-[100px]" />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="glass rounded-3xl p-8 md:p-10 w-full max-w-md relative z-10"
+        className="bg-white rounded-2xl p-8 md:p-10 w-full max-w-md relative z-10 border border-gray-200 shadow-xl shadow-gray-200/50"
       >
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-primary-600/30 mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center shadow-xl shadow-accent/25 mb-4">
             <Shield className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Create Account</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Create Account</h1>
           <p className="text-gray-500 text-sm mt-1">Join WatchTowerAI Platform</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="reg-name" className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Full Name</label>
+            <label htmlFor="reg-name" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
             <input
               id="reg-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="input-field"
-              placeholder="John Doe"
+              placeholder="firstName lastName"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="reg-email" className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Email</label>
+            <label htmlFor="reg-email" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Email</label>
             <input
               id="reg-email"
               type="email"
@@ -85,7 +85,7 @@ export default function Register() {
           </div>
 
           <div>
-            <label htmlFor="reg-role" className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Role</label>
+            <label htmlFor="reg-role" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Role</label>
             <select id="reg-role" value={role} onChange={(e) => setRole(e.target.value)} className="select-field">
               <option value="operator">Operator</option>
               <option value="admin">Admin</option>
@@ -93,7 +93,7 @@ export default function Register() {
           </div>
 
           <div>
-            <label htmlFor="reg-password" className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Password</label>
+            <label htmlFor="reg-password" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Password</label>
             <div className="relative">
               <input
                 id="reg-password"
@@ -107,7 +107,7 @@ export default function Register() {
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-accent"
               >
                 {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -115,7 +115,7 @@ export default function Register() {
           </div>
 
           <div>
-            <label htmlFor="reg-confirm" className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Confirm Password</label>
+            <label htmlFor="reg-confirm" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Confirm Password</label>
             <input
               id="reg-confirm"
               type="password"
@@ -142,7 +142,7 @@ export default function Register() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-primary-400 hover:text-primary-300 font-medium">Sign in</Link>
+          <Link to="/login" className="text-accent hover:text-accent-dark font-semibold">Sign in</Link>
         </p>
       </motion.div>
     </div>

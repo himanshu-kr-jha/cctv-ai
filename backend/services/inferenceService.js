@@ -1,18 +1,75 @@
 const ort = require('onnxruntime-node');
 const sharp = require('sharp');
+const fs = require('fs');
 const { nms } = require('../utils/nms');
 const logger = require('../utils/logger');
 
 // Cache loaded sessions
 const sessionCache = new Map();
 
+// Blacklist models that failed to load so we don't retry every 5 seconds
+const failedModels = new Map(); // filePath -> { reason, timestamp }
+
 /**
- * Load an ONNX model session (cached)
+ * Check if a file looks like a valid ONNX model by inspecting the header magic bytes.
+ * ONNX files are Protobuf-serialized and start with byte 0x08 (field 1, varint).
+ * PyTorch .pt files are ZIP archives starting with PK (0x50 0x4B).
+ */
+function validateModelFile(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return { valid: false, reason: `Model file not found: ${filePath}` };
+  }
+
+  const ext = filePath.toLowerCase().split('.').pop();
+  const fd = fs.openSync(filePath, 'r');
+  const header = Buffer.alloc(4);
+  fs.readSync(fd, header, 0, 4, 0);
+  fs.closeSync(fd);
+
+  // Detect PyTorch ZIP archives (.pt / .pth)
+  if (header[0] === 0x50 && header[1] === 0x4B) {
+    return {
+      valid: false,
+      reason: `File is a PyTorch (.pt/.pth) archive, not ONNX. Convert it first: "python -m onnxruntime.transformers.optimizer --model ${filePath}" or use ultralytics export.`,
+    };
+  }
+
+  // Warn on non-.onnx extensions
+  if (ext !== 'onnx') {
+    return {
+      valid: false,
+      reason: `Unsupported model format ".${ext}". Only .onnx models are supported by the inference engine. Convert your model to ONNX format first.`,
+    };
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Load an ONNX model session (cached).
+ * Blacklists broken models so they are not retried on every detection cycle.
  */
 async function loadModel(filePath) {
+  // Return cached session immediately
   if (sessionCache.has(filePath)) {
     return sessionCache.get(filePath);
   }
+
+  // Skip models that already failed
+  if (failedModels.has(filePath)) {
+    const failure = failedModels.get(filePath);
+    throw new Error(`Model previously failed: ${failure.reason}`);
+  }
+
+  // Pre-validate before attempting expensive ONNX load
+  const validation = validateModelFile(filePath);
+  if (!validation.valid) {
+    failedModels.set(filePath, { reason: validation.reason, timestamp: Date.now() });
+    logger.error(`Model validation failed: ${validation.reason}`);
+    await autoDeactivateModel(filePath);
+    throw new Error(validation.reason);
+  }
+
   try {
     const session = await ort.InferenceSession.create(filePath, {
       executionProviders: ['cpu'],
@@ -21,8 +78,30 @@ async function loadModel(filePath) {
     logger.success(`Model loaded: ${filePath}`);
     return session;
   } catch (err) {
+    const reason = `Load failed: ${err.message}`;
+    failedModels.set(filePath, { reason, timestamp: Date.now() });
     logger.error(`Failed to load model: ${filePath}`, { error: err.message });
+    logger.warn(`Model blacklisted — will not retry until server restart or manual reactivation.`);
+    await autoDeactivateModel(filePath);
     throw err;
+  }
+}
+
+/**
+ * Auto-deactivate a model in the database when it fails to load.
+ * This stops the scheduler from continuously queuing jobs for a broken model.
+ */
+async function autoDeactivateModel(filePath) {
+  try {
+    const AIModel = require('../models/AIModel');
+    const model = await AIModel.findOne({ filePath });
+    if (model && model.isActive) {
+      model.isActive = false;
+      await model.save();
+      logger.warn(`Auto-deactivated model "${model.name}" (${model._id}) due to load failure. Fix the model file and reactivate manually.`);
+    }
+  } catch (dbErr) {
+    logger.error('Failed to auto-deactivate model in DB', { error: dbErr.message });
   }
 }
 
@@ -213,13 +292,18 @@ function simulateDetection(labels, threshold) {
 }
 
 /**
- * Clear a model from the session cache
+ * Clear a model from the session cache and the failed-model blacklist.
+ * Call this when a model file is replaced or the user wants to retry.
  */
 function clearModelCache(filePath) {
   if (sessionCache.has(filePath)) {
     sessionCache.delete(filePath);
-    logger.info(`Cleared model cache: ${filePath}`);
+    logger.info(`Cleared model session cache: ${filePath}`);
+  }
+  if (failedModels.has(filePath)) {
+    failedModels.delete(filePath);
+    logger.info(`Cleared model from blacklist: ${filePath}`);
   }
 }
 
-module.exports = { runInference, loadModel, clearModelCache, simulateDetection };
+module.exports = { runInference, loadModel, clearModelCache, simulateDetection, validateModelFile };

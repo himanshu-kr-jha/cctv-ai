@@ -4,19 +4,19 @@ import { motion } from 'framer-motion';
 
 export default function ModelCard({ model, onToggle, onDelete, delay = 0 }) {
   const typeColors = {
-    yolo: 'from-violet-500/30 to-purple-500/20 border-violet-500/30',
-    onnx: 'from-blue-500/30 to-cyan-500/20 border-blue-500/30',
-    tensorflow: 'from-orange-500/30 to-yellow-500/20 border-orange-500/30',
-    pytorch: 'from-red-500/30 to-pink-500/20 border-red-500/30',
-    custom: 'from-gray-500/30 to-slate-500/20 border-gray-500/30',
+    yolo: 'from-violet-50 to-purple-50 border-violet-200',
+    onnx: 'from-blue-50 to-cyan-50 border-blue-200',
+    tensorflow: 'from-orange-50 to-yellow-50 border-orange-200',
+    pytorch: 'from-red-50 to-pink-50 border-red-200',
+    custom: 'from-gray-50 to-slate-50 border-gray-200',
   };
 
   const typeBadgeColors = {
-    yolo: 'bg-violet-500/20 text-violet-400',
-    onnx: 'bg-blue-500/20 text-blue-400',
-    tensorflow: 'bg-orange-500/20 text-orange-400',
-    pytorch: 'bg-red-500/20 text-red-400',
-    custom: 'bg-gray-500/20 text-gray-400',
+    yolo: 'bg-violet-100 text-violet-600',
+    onnx: 'bg-blue-100 text-blue-600',
+    tensorflow: 'bg-orange-100 text-orange-600',
+    pytorch: 'bg-red-100 text-red-600',
+    custom: 'bg-gray-100 text-gray-600',
   };
 
   return (
@@ -29,11 +29,11 @@ export default function ModelCard({ model, onToggle, onDelete, delay = 0 }) {
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-white/5">
-            <Cpu className="w-5 h-5 text-primary-400" />
+          <div className="p-2.5 rounded-xl bg-white shadow-sm border border-gray-100">
+            <Cpu className="w-5 h-5 text-accent" />
           </div>
           <div>
-            <h3 className="font-semibold text-white text-sm leading-tight">{model.name}</h3>
+            <h3 className="font-semibold text-gray-800 text-sm leading-tight">{model.name}</h3>
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1 inline-block ${typeBadgeColors[model.modelType] || typeBadgeColors.custom}`}>
               {model.modelType}
             </span>
@@ -41,7 +41,7 @@ export default function ModelCard({ model, onToggle, onDelete, delay = 0 }) {
         </div>
         <button
           onClick={() => onToggle(model._id)}
-          className={`p-1.5 rounded-lg transition-colors ${model.isActive ? 'text-emerald-400 hover:bg-emerald-500/10' : 'text-gray-500 hover:bg-white/5'}`}
+          className={`p-1.5 rounded-lg transition-colors ${model.isActive ? 'text-emerald-500 hover:bg-emerald-50' : 'text-gray-400 hover:bg-gray-100'}`}
           title={model.isActive ? 'Deactivate' : 'Activate'}
         >
           {model.isActive ? <ToggleRight className="w-6 h-6" /> : <ToggleLeft className="w-6 h-6" />}
@@ -53,44 +53,44 @@ export default function ModelCard({ model, onToggle, onDelete, delay = 0 }) {
         {model.labels.slice(0, 6).map((label) => {
           const isAlert = model.alertLabels?.includes(label);
           return (
-            <span key={label} className={`text-[10px] px-2 py-0.5 rounded-md ${isAlert ? 'bg-red-500/20 text-red-400 font-medium border border-red-500/30' : 'bg-white/5 text-gray-400'}`}>
+            <span key={label} className={`text-[10px] px-2 py-0.5 rounded-md ${isAlert ? 'bg-red-100 text-red-600 font-medium border border-red-200' : 'bg-gray-100 text-gray-600'}`}>
               {label}
             </span>
           );
         })}
         {model.labels.length > 6 && (
-          <span className="text-[10px] bg-white/5 text-gray-500 px-2 py-0.5 rounded-md">+{model.labels.length - 6} more</span>
+          <span className="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-md">+{model.labels.length - 6} more</span>
         )}
       </div>
 
       {/* Metadata */}
       <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 mb-4">
         <div>
-          <span className="text-gray-600">Threshold</span>
-          <p className="text-gray-300 font-medium">{(model.confidenceThreshold * 100).toFixed(0)}%</p>
+          <span className="text-gray-400">Threshold</span>
+          <p className="text-gray-700 font-medium">{(model.confidenceThreshold * 100).toFixed(0)}%</p>
         </div>
         <div>
-          <span className="text-gray-600">Resolution</span>
-          <p className="text-gray-300 font-medium">{model.inputResolution}px</p>
+          <span className="text-gray-400">Resolution</span>
+          <p className="text-gray-700 font-medium">{model.inputResolution}px</p>
         </div>
         <div>
-          <span className="text-gray-600">Size</span>
-          <p className="text-gray-300 font-medium">{formatFileSize(model.fileSize)}</p>
+          <span className="text-gray-400">Size</span>
+          <p className="text-gray-700 font-medium">{formatFileSize(model.fileSize)}</p>
         </div>
         <div>
-          <span className="text-gray-600">Uploaded</span>
-          <p className="text-gray-300 font-medium">{timeAgo(model.createdAt)}</p>
+          <span className="text-gray-400">Uploaded</span>
+          <p className="text-gray-700 font-medium">{timeAgo(model.createdAt)}</p>
         </div>
       </div>
 
       {/* Status & Actions */}
-      <div className="flex items-center justify-between pt-3 border-t border-white/5">
+      <div className="flex items-center justify-between pt-3 border-t border-gray-200">
         <span className={model.isActive ? 'badge-active' : 'badge-inactive'}>
           {model.isActive ? 'Active' : 'Inactive'}
         </span>
         <button
           onClick={() => onDelete(model._id)}
-          className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
           title="Delete model"
         >
           <Trash2 className="w-4 h-4" />

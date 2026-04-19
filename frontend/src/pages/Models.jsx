@@ -4,7 +4,7 @@ import api from '../api/axios';
 import ModelCard from '../components/ModelCard';
 import { CardSkeleton } from '../components/LoadingSkeleton';
 import ConfirmDialog from '../components/ConfirmDialog';
-import { Plus, Upload, X } from 'lucide-react';
+import { Plus, Upload, X, Box, Cpu, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { MODEL_TYPES } from '../utils/constants';
@@ -89,7 +89,7 @@ export default function Models() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">AI Models</h1>
+          <h1 className="text-2xl font-bold text-gray-800">AI Models</h1>
           <p className="text-gray-500 text-sm mt-1">Upload and manage detection models</p>
         </div>
         <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center gap-2 text-sm">
@@ -108,8 +108,8 @@ export default function Models() {
             className="overflow-hidden"
           >
             <form onSubmit={handleUpload} className="glass-card space-y-4">
-              <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
-                <Upload className="w-4 h-4 text-primary-400" /> Upload New Model
+              <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <Upload className="w-4 h-4 text-accent" /> Upload New Model
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -187,12 +187,12 @@ export default function Models() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1">Model File</label>
-                  <div className="border-2 border-dashed border-white/10 rounded-xl p-6 text-center hover:border-primary-500/30 transition-colors cursor-pointer"
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-accent/50 transition-colors cursor-pointer bg-gray-50"
                     onClick={() => document.getElementById('model-file-input').click()}>
                     {form.file ? (
-                      <p className="text-sm text-primary-400">{form.file.name} ({(form.file.size / 1024 / 1024).toFixed(1)} MB)</p>
+                      <p className="text-sm text-accent font-medium">{form.file.name} ({(form.file.size / 1024 / 1024).toFixed(1)} MB)</p>
                     ) : (
-                      <p className="text-sm text-gray-500">Click or drag to upload .onnx, .pt, .pb, .tflite, .h5</p>
+                      <p className="text-sm text-gray-400">Click or drag to upload .onnx, .pt, .pb, .tflite, .h5</p>
                     )}
                     <input
                       id="model-file-input"
@@ -236,11 +236,40 @@ export default function Models() {
           ))}
         </div>
       ) : (
-        <div className="glass-card text-center py-16">
-          <Box className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400 mb-2">No models uploaded yet</p>
-          <p className="text-gray-600 text-sm">Click "Upload Model" to get started</p>
-        </div>
+        /* ── Empty state: all models removed ── */
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card text-center py-16 px-8"
+        >
+          <div className="relative inline-block mb-6">
+            <div className="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto">
+              <Cpu className="w-10 h-10 text-accent" />
+            </div>
+            <div className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-accent" />
+            </div>
+          </div>
+          <h3 className="text-lg font-bold text-gray-800 mb-2">No AI models uploaded yet</h3>
+          <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
+            Upload your first detection model to start monitoring camera feeds. Supports YOLO, ONNX, TensorFlow, and PyTorch formats.
+          </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="btn-primary inline-flex items-center gap-2 text-sm"
+          >
+            <Upload className="w-4 h-4" />
+            Upload Your First Model
+          </button>
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-lg mx-auto">
+            {MODEL_TYPES.slice(0, 4).map((type) => (
+              <div key={type.value} className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center">
+                <Box className="w-5 h-5 text-gray-400 mx-auto mb-1" />
+                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{type.label}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       )}
 
       {/* Delete confirmation */}

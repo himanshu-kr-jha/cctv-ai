@@ -1,0 +1,133 @@
+/* Login Animations - specific to the interactive login page matching index.html */
+.stage {
+  transform-origin: center;
+}
+
+.character {
+  transform-origin: center;
+}
+
+.animate-float1 { animation: float1 4.2s cubic-bezier(0.42, 0, 0.58, 1) infinite; }
+.animate-float2 { animation: float2 3.8s cubic-bezier(0.42, 0, 0.58, 1) infinite; }
+.animate-float3 { animation: float3 4.6s cubic-bezier(0.42, 0, 0.58, 1) infinite; }
+.animate-float4 { animation: float4 4.1s cubic-bezier(0.42, 0, 0.58, 1) infinite; }
+
+.char-body {
+  transition: fill 0.3s ease;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+}
+
+.char-head {
+  transition: fill 0.3s ease;
+}
+
+.eye {
+  transition: fill 0.3s ease;
+  animation: blink 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center;
+}
+
+#char2 .eye { animation-delay: 0.6s; }
+#char3 .eye { animation-delay: 1.2s; }
+#char4 .eye { animation-delay: 0.2s; }
+
+.pupil {
+  transition: cx 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), cy 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+@keyframes float1 {
+  0% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-12px) scale(1.01); }
+  50% { transform: translateY(-24px) scale(1.02); }
+  75% { transform: translateY(-12px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes float2 {
+  0% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-14px) scale(1.01); }
+  50% { transform: translateY(-28px) scale(1.02); }
+  75% { transform: translateY(-14px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes float3 {
+  0% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-9px) scale(1.01); }
+  50% { transform: translateY(-18px) scale(1.02); }
+  75% { transform: translateY(-9px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes float4 {
+  0% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-11px) scale(1.01); }
+  50% { transform: translateY(-22px) scale(1.02); }
+  75% { transform: translateY(-11px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+  97% { transform: scaleY(0.04); }
+  98% { transform: scaleY(0); }
+}
+
+.input-wrap input:focus {
+  border-bottom-color: #6c63ff;
+}
+
+.input-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #6c63ff;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.input-wrap input:focus ~ .input-line {
+  width: 100%;
+  animation: expandLine 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes expandLine {
+  0% { width: 0; opacity: 0.3; }
+  100% { width: 100%; opacity: 1; }
+}
+
+.checkmark {
+  width: 17px;
+  height: 17px;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.remember input:checked + .checkmark {
+  background: #6c63ff;
+  border-color: #6c63ff;
+  animation: checkPulse 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes checkPulse {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.remember input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(42deg) translateY(-1px);
+  display: block;
+}

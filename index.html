@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome back</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- LEFT PANEL -->
+  <div class="panel panel--left" id="leftPanel">
+    <svg class="stage" viewBox="0 0 500 600" preserveAspectRatio="xMidYMid meet">
+      <!-- Purple Character (left) - char1 -->
+      <g class="character character--1" id="char1">
+        <rect class="char-body" x="45" y="280" width="90" height="180" fill="#6b5bff" rx="12"/>
+        <circle class="char-head" cx="90" cy="210" r="50" fill="#6b5bff"/>
+        <circle class="eye" id="eye1L" cx="70" cy="190" r="10" fill="white"/>
+        <circle class="eye" id="eye1R" cx="110" cy="190" r="10" fill="white"/>
+        <circle class="pupil" id="pupil1L" cx="72" cy="193" r="5" fill="black"/>
+        <circle class="pupil" id="pupil1R" cx="112" cy="193" r="5" fill="black"/>
+        <path class="mouth" d="M 80 220 Q 90 230 100 220" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- Orange Semi-circle (center-bottom) - char2 -->
+      <g class="character character--2" id="char2">
+        <ellipse class="char-body" cx="250" cy="420" rx="100" ry="120" fill="#ff9d5c"/>
+        <circle class="eye" id="eye2L" cx="215" cy="380" r="13" fill="white"/>
+        <circle class="eye" id="eye2R" cx="285" cy="380" r="13" fill="white"/>
+        <circle class="pupil" id="pupil2L" cx="218" cy="384" r="6" fill="black"/>
+        <circle class="pupil" id="pupil2R" cx="288" cy="384" r="6" fill="black"/>
+        <path class="mouth" d="M 235 420 Q 250 440 265 420" stroke="#2d2d2d" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- Black Rectangle (center-right) - char3 -->
+      <g class="character character--3" id="char3">
+        <rect class="char-body" x="310" y="300" width="80" height="180" fill="#2d2d2d" rx="8"/>
+        <circle class="char-head" cx="350" cy="230" r="40" fill="#2d2d2d"/>
+        <circle class="eye" id="eye3L" cx="330" cy="215" r="9" fill="white"/>
+        <circle class="eye" id="eye3R" cx="370" cy="215" r="9" fill="white"/>
+        <circle class="pupil" id="pupil3L" cx="333" cy="219" r="4" fill="black"/>
+        <circle class="pupil" id="pupil3R" cx="373" cy="219" r="4" fill="black"/>
+        <path class="mouth" d="M 340 250 L 360 250" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- Yellow Character (right) - char4 -->
+      <g class="character character--4" id="char4">
+        <ellipse class="char-body" cx="410" cy="380" rx="60" ry="100" fill="#ffd93d"/>
+        <circle class="char-head" cx="410" cy="220" r="45" fill="#ffd93d"/>
+        <circle class="eye" id="eye4L" cx="390" cy="200" r="9" fill="white"/>
+        <circle class="eye" id="eye4R" cx="430" cy="200" r="9" fill="white"/>
+        <circle class="pupil" id="pupil4L" cx="393" cy="204" r="4" fill="black"/>
+        <circle class="pupil" id="pupil4R" cx="433" cy="204" r="4" fill="black"/>
+        <path class="mouth" d="M 405 235 Q 410 245 415 235" stroke="#2d2d2d" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel panel--right">
+    <div class="login-card">
+      <h1 class="title">Welcome back!</h1>
+      <p class="subtitle">Please enter your details</p>
+
+      <div id="errorMsg" class="error-msg" aria-live="polite"></div>
+
+      <div class="field">
+        <label for="emailInput">Email</label>
+        <div class="input-wrap">
+          <input
+            type="email"
+            id="emailInput"
+            placeholder="you@example.com"
+            autocomplete="email"
+          />
+          <span class="input-line"></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="passwordInput">Password</label>
+        <div class="input-wrap">
+          <input
+            type="password"
+            id="passwordInput"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+          <button class="toggle-pw" id="togglePw" type="button" aria-label="Toggle password visibility">
+            <svg id="eyeIcon" class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg id="eyeOffIcon" class="icon-eye hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+          <span class="input-line"></span>
+        </div>
+      </div>
+
+      <div class="row-options">
+        <label class="remember">
+          <input type="checkbox" id="rememberMe" />
+          <span class="checkmark"></span>
+          <span>Remember me</span>
+        </label>
+        <a href="#" class="forgot">Forgot password?</a>
+      </div>
+
+      <button class="btn btn--primary" id="loginBtn" type="button">Log in</button>
+      <button class="btn btn--google" type="button">
+        <svg viewBox="0 0 24 24" class="google-icon" aria-hidden="true">
+          <path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
+          <path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/>
+          <path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/>
+          <path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/>
+        </svg>
+        Log in with Google
+      </button>
+
+      <p class="signup-text">Don't have an account? <a href="#">Sign up</a></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

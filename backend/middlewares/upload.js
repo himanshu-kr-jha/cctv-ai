@@ -14,13 +14,29 @@ const modelStorage = multer.diskStorage({
 });
 
 const modelFileFilter = (req, file, cb) => {
-  const allowed = ['.onnx', '.pb', '.pt', '.pth', '.tflite', '.h5', '.bin'];
   const ext = path.extname(file.originalname).toLowerCase();
-  if (allowed.includes(ext)) {
-    cb(null, true);
-  } else {
-    cb(new Error(`Invalid model file type: ${ext}. Allowed: ${allowed.join(', ')}`), false);
+
+  // Only ONNX models are supported by the inference engine
+  if (ext === '.onnx') {
+    return cb(null, true);
   }
+
+  // Give a specific, helpful error for PyTorch files
+  if (ext === '.pt' || ext === '.pth') {
+    return cb(
+      new Error(
+        `PyTorch models (${ext}) are not directly supported. Please convert to ONNX first using: "yolo export model=your_model${ext} format=onnx"`
+      ),
+      false
+    );
+  }
+
+  cb(
+    new Error(
+      `Unsupported model format: ${ext}. Only .onnx models are supported. Convert your model to ONNX format first.`
+    ),
+    false
+  );
 };
 
 const uploadModel = multer({

@@ -6,7 +6,7 @@ import ImagePreviewModal from '../components/ImagePreviewModal';
 import { TableSkeleton } from '../components/LoadingSkeleton';
 import { SeverityPieChart, LabelBarChart } from '../components/ChartWidgets';
 import { useAlertStore } from '../store/alertStore';
-import { AlertTriangle, Download, Trash2, Search, Filter, BarChart3 } from 'lucide-react';
+import { AlertTriangle, Download, Trash2, Search, Filter, BarChart3, Bell } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 
@@ -96,10 +96,10 @@ export default function Alerts() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             Alerts
             {alertStats?.totalToday > 0 && (
-              <span className="bg-red-500/20 text-red-400 text-sm px-3 py-0.5 rounded-full font-medium">
+              <span className="bg-red-100 text-red-600 text-sm px-3 py-0.5 rounded-full font-semibold">
                 {alertStats.totalToday} today
               </span>
             )}
@@ -127,7 +127,7 @@ export default function Alerts() {
           className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden"
         >
           <div className="glass-card">
-            <h3 className="text-sm font-semibold text-gray-300 mb-2">Severity Distribution</h3>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Severity Distribution</h3>
             {severityData.length > 0 ? (
               <>
                 <SeverityPieChart data={severityData} />
@@ -138,15 +138,15 @@ export default function Alerts() {
                 </div>
               </>
             ) : (
-              <p className="text-gray-600 text-sm text-center py-8">No data</p>
+              <p className="text-gray-400 text-sm text-center py-8">No data</p>
             )}
           </div>
           <div className="glass-card">
-            <h3 className="text-sm font-semibold text-gray-300 mb-2">Top Labels</h3>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Top Labels</h3>
             {labelChartData.length > 0 ? (
               <LabelBarChart data={labelChartData} />
             ) : (
-              <p className="text-gray-600 text-sm text-center py-8">No data</p>
+              <p className="text-gray-400 text-sm text-center py-8">No data</p>
             )}
           </div>
         </motion.div>
@@ -155,7 +155,7 @@ export default function Alerts() {
       {/* Filters */}
       <div className="glass-card-sm flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             placeholder="Search alerts..."
             value={filters.search}
@@ -215,7 +215,7 @@ export default function Alerts() {
               >
                 Previous
               </button>
-              <span className="text-sm text-gray-400">
+              <span className="text-sm text-gray-500">
                 Page {filters.page} of {alertData.totalPages}
               </span>
               <button
@@ -229,11 +229,17 @@ export default function Alerts() {
           )}
         </div>
       ) : (
-        <div className="glass-card text-center py-16">
-          <AlertTriangle className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400 mb-2">No alerts found</p>
-          <p className="text-gray-600 text-sm">Start detection on cameras to generate alerts</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card text-center py-16 px-8"
+        >
+          <div className="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-6">
+            <Bell className="w-10 h-10 text-accent" />
+          </div>
+          <h3 className="text-lg font-bold text-gray-800 mb-2">No alerts found</h3>
+          <p className="text-gray-500 text-sm">Start detection on cameras to generate alerts</p>
+        </motion.div>
       )}
 
       {/* Image preview modal */}
